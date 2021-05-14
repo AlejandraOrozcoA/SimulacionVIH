@@ -3,11 +3,14 @@ package simulacionvih.vistas;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Graphics;
+import simulacionvih.VIH;
 
 public class Simulacion extends javax.swing.JFrame {
-    final int ancho = 200, alto = 100;
-    Image tableroI;
-    Graphics tableroG;
+    private final int ancho = 200;
+    private final int alto = 100;
+    private VIH cel = new VIH(ancho, alto);
+    private Image tableroI;
+    private Graphics tableroG;
     
     public Simulacion() {
         initComponents();
@@ -18,7 +21,17 @@ public class Simulacion extends javax.swing.JFrame {
     
     private void dibujarTablero(){
         tableroG.setColor(jPanel1.getBackground());
-        tableroG.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
+        tableroG.fillRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());     
+        for (int i = 0; i < alto; i++) {
+            for (int j = 0; j < ancho; j++) {
+                if (cel.getActual(i,j)== 'A') {
+                    tableroG.setColor(Color.yellow);
+                    int y = i* jPanel1.getHeight()/alto;
+                    int x = j* jPanel1.getWidth()/ancho;
+                    tableroG.fillRect(x, y, jPanel1.getWidth()/ancho, jPanel1.getHeight()/alto);
+                }
+            }
+        }
         tableroG.setColor(Color.black);
         //dibuja barras Horizontales 
         for (int i = 0; i < alto; i++) {
@@ -30,7 +43,7 @@ public class Simulacion extends javax.swing.JFrame {
             int x = j* jPanel1.getWidth()/ancho;
             tableroG.drawLine(x, 0, x , jPanel1.getHeight());
         }
-
+        
         jPanel1.getGraphics().drawImage(tableroI, 0, 0, jPanel1);
     }
    
@@ -118,12 +131,16 @@ public class Simulacion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+        int x = ancho * evt.getX()/jPanel1.getWidth();
+        int y = alto * evt.getY()/jPanel1.getHeight();
+        cel.setActual(y, x, 'A');
         dibujarTablero();
     }//GEN-LAST:event_jPanel1MouseClicked
 
     private void jPanel1ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jPanel1ComponentResized
         tableroI = createImage(jPanel1.getWidth(),jPanel1.getHeight() );
         tableroG = tableroI.getGraphics();
+        
         dibujarTablero();
     }//GEN-LAST:event_jPanel1ComponentResized
 
