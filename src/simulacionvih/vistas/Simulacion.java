@@ -3,6 +3,7 @@ package simulacionvih.vistas;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import simulacionvih.VIH;
@@ -11,18 +12,32 @@ public class Simulacion extends javax.swing.JFrame {
     private final int ancho = 200;
     private final int alto = 200;
     private VIH cel;
+    private Grafica graf;
     private Image tableroI;
     private Graphics tableroG;
     private boolean inicio;
     private Timer t; 
     private TimerTask task;
+    private int contador=1;
+    private ArrayList<Double> h = new ArrayList<>();;
+    private ArrayList<Double> a = new ArrayList<>();;
+    private ArrayList<Double> b = new ArrayList<>();;
+    private ArrayList<Double> d = new ArrayList<>();;
     
     public Simulacion() {
         initComponents();
         cel = new VIH(ancho, alto);
+        h.add((double)alto*ancho);
+        a.add(0.0);
+        b.add(0.0);
+        d.add(0.0);
         inicio = true;
         tableroI = createImage(jPanel1.getWidth(),jPanel1.getHeight() );
         tableroG = tableroI.getGraphics();
+        timer();
+
+    }
+    private void timer() {
         t = new Timer();
         task = new TimerTask(){
             @Override
@@ -37,13 +52,21 @@ public class Simulacion extends javax.swing.JFrame {
                     for (int i = 0; i < alto; i++) {
                         for (int j = 0; j < ancho; j++) {
                            cel.actualizarEstado(i, j,cel.getSiguiente(j, i));
+                            
                         }
+                        
                     }
+                    contador++;
+                    cel.contarCelulas();
+                    h.add((double)cel.getCelulasH());
+                    a.add((double)cel.getCelulasA());
+                    b.add((double)cel.getCelulasB());
+                    d.add((double)cel.getCelulasD());
                     dibujarTablero();
                 }
             }
         };
-        t.scheduleAtFixedRate(task, 0, 400);
+        t.scheduleAtFixedRate(task, 0, 1000);
         dibujarTablero();
     }
     
@@ -102,6 +125,7 @@ public class Simulacion extends javax.swing.JFrame {
         btnInicio = new javax.swing.JButton();
         btnClean = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -150,6 +174,13 @@ public class Simulacion extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Grafica");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,7 +190,9 @@ public class Simulacion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                         .addComponent(jButton1)
                         .addGap(18, 18, 18)
                         .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -175,7 +208,8 @@ public class Simulacion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                    .addComponent(btnClean, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnClean, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -207,6 +241,11 @@ public class Simulacion extends javax.swing.JFrame {
 
     private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
         cel.llenar();
+        h.clear();
+        a.clear();
+        b.clear();
+        d.clear();
+        contador=0;
         dibujarTablero();
     }//GEN-LAST:event_btnCleanActionPerformed
 
@@ -215,10 +254,25 @@ public class Simulacion extends javax.swing.JFrame {
         dibujarTablero();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Grafica graf= new Grafica(h,a,b,d,contador);
+        inicio = !inicio;
+        if (inicio) {
+            btnInicio.setText("Inicio");
+        }else{
+            btnInicio.setText("Pausa");
+        }
+        dibujarTablero();
+        //this.setVisible(false);
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClean;
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
 }
