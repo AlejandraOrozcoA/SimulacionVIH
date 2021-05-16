@@ -3,95 +3,85 @@ package simulacionvih.vistas;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.Math.*;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import org.math.array.DoubleArray.*;
 import org.math.plot.Plot2DPanel;
 
 public class Grafica {
-    
-    private double x[] ={0.0,0.0};
-    private double y[] ={0.0,0.0};
-    
+
     private double yH[];
     private double yA[];
     private double yB[];
     private double yD[];
+    private double yI[];
     
     private double t[];
 
-    private JButton btnA, btnB, btnH, btnD;
-    private Plot2DPanel plot = new Plot2DPanel();
-
-    public Grafica() {
-        agregarComponentes();
-    }
+    private JButton btnG1, btnG2;
     
-    
+    private Plot2DPanel plot = new Plot2DPanel();      
     public Grafica(ArrayList<Double> h,ArrayList<Double> a,ArrayList<Double> b, ArrayList<Double> d, int contador){
-        yH= new double[h.size()];
-        yA= new double[a.size()];
-        yB= new double[b.size()];
-        yD= new double[d.size()];
+        yH= new double[h.size()+1];
+        yA= new double[a.size()+1];
+        yB= new double[b.size()+1];
+        yD= new double[d.size()+1];
+        yI= new double[a.size()+1];
         
         t = new double [contador];
+        
         llenarH(h);
         llenarA(a);
         llenarB(b);
         llenarD(d);
+        llenarI(a,b);
         llenarT(contador);
         agregarComponentes();
     }
 
     private void agregarComponentes() {
-        btnA = new JButton("Celulas A");
-        btnB = new JButton("Celulas B");
-        btnH = new JButton("Celulas H");
-        btnD = new JButton("Celulas D");
-   
+        btnG1 = new JButton("Grafica 1");
+        btnG2 = new JButton("Grafica 2");
+        
         JFrame frame =  new JFrame("Grafica");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600,500);
+        frame.setSize(800,600);
         frame.add(construirPanel());
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true); 
         
-        btnH.addActionListener(new ActionListener() {
+        btnG1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                plot.addScatterPlot("Celulas H",Color.BLUE ,t, yH);
-                plot.addLinePlot("Celulas H",Color.BLUE ,t, yH);
+                plot.removeAllPlots();
+                plot.addScatterPlot("Celulas Infectadas",Color.ORANGE ,t, yI);
+                plot.addLinePlot("Celulas Infectadas",Color.ORANGE ,t, yI);
+                plot.addScatterPlot("Celulas Muertas", Color.RED, t, yD);
+                plot.addLinePlot("Celulas Muertas", Color.RED, t, yD);
+                plot.addScatterPlot("Celulas Sanas",Color.BLUE ,t, yH);
+                plot.addLinePlot("Celulas Sanas",Color.BLUE ,t, yH);
+                
             }
         });
         
-        btnA.addActionListener(new ActionListener() {
+        btnG2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                plot.addScatterPlot("Celulas A",Color.orange ,t, yA);
-                plot.addLinePlot("Celulas A",Color.orange ,t, yA);
+                plot.removeAllPlots();
+                plot.addScatterPlot("Celulas Infectadas A",Color.ORANGE ,t, yA);
+                plot.addLinePlot("Celulas Infectadas A",Color.ORANGE ,t, yA);
+                plot.addScatterPlot("Celulas Infectadas B",Color.GREEN ,t, yB);
+                plot.addLinePlot("Celulas Infectadas B",Color.GREEN ,t, yB);
+                plot.addScatterPlot("Celulas Muertas", Color.RED, t, yD);
+                plot.addLinePlot("Celulas Muertas", Color.RED, t, yD);
+                plot.addScatterPlot("Celulas Sanas",Color.BLUE ,t, yH);
+                plot.addLinePlot("Celulas Sanas",Color.BLUE ,t, yH);
             }
         });
         
-        btnB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                plot.addScatterPlot("Celulas B",Color.GREEN,t, yB);
-                plot.addLinePlot("Celulas B",Color.GREEN,t, yB);
-            }
-        });
-        
-        btnD.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                plot.addScatterPlot("Celulas D", Color.RED, t, yD);
-                plot.addLinePlot("Celulas D", Color.RED, t, yD);
-            }
-        });
     }
 
     private JPanel construirPanel() {
@@ -104,10 +94,8 @@ public class Grafica {
 
     private Component contruirSubpanel() {
         JPanel pSub = new JPanel();
-        pSub.add(btnA);
-        pSub.add(btnB);
-        pSub.add(btnH);
-        pSub.add(btnD);
+        pSub.add(btnG1);
+        pSub.add(btnG2);
         return pSub;
     }
 
@@ -140,5 +128,10 @@ public class Grafica {
              yD[i]= Double.parseDouble(d.get(i).toString());   
         }
     }
-    
+
+    private void llenarI(ArrayList<Double> a, ArrayList<Double> b) {
+        for (int i = 0; i < a.size(); i++) {
+             yI[i]= Double.parseDouble(a.get(i).toString())+ Double.parseDouble(b.get(i).toString());   
+        }
+    }  
 }

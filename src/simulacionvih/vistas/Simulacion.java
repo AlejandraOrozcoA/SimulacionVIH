@@ -18,7 +18,7 @@ public class Simulacion extends javax.swing.JFrame {
     private boolean inicio;
     private Timer t; 
     private TimerTask task;
-    private int contador=1;
+    private int contador;
     private ArrayList<Double> h = new ArrayList<>();;
     private ArrayList<Double> a = new ArrayList<>();;
     private ArrayList<Double> b = new ArrayList<>();;
@@ -27,6 +27,7 @@ public class Simulacion extends javax.swing.JFrame {
     public Simulacion() {
         initComponents();
         cel = new VIH();
+        contador=1;
         this.alto = cel.alto;
         this.ancho = cel.ancho;
         h.add((double)alto*ancho);
@@ -151,7 +152,7 @@ public class Simulacion extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 313, Short.MAX_VALUE)
+            .addGap(0, 491, Short.MAX_VALUE)
         );
 
         btnInicio.setText("Inicio");
@@ -176,7 +177,7 @@ public class Simulacion extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Grafica");
+        jButton2.setText("Graficar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -194,7 +195,7 @@ public class Simulacion extends javax.swing.JFrame {
                         .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 389, Short.MAX_VALUE)
                         .addComponent(jButton1)
                         .addGap(18, 18, 18)
                         .addComponent(btnClean, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -247,7 +248,12 @@ public class Simulacion extends javax.swing.JFrame {
         a.clear();
         b.clear();
         d.clear();
-        contador=0;
+        
+        h.add((double)alto*ancho);
+        a.add(0.0);
+        b.add(0.0);
+        d.add(0.0);
+        contador=1;
         dibujarTablero();
     }//GEN-LAST:event_btnCleanActionPerformed
 
@@ -265,7 +271,7 @@ public class Simulacion extends javax.swing.JFrame {
             btnInicio.setText("Pausa");
         }
         dibujarTablero();
-        //this.setVisible(false);
+        this.setVisible(false);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
