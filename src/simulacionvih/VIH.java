@@ -5,15 +5,15 @@ import java.util.Random;
 
 public class VIH {
     //Datos contasntes
+    public final int alto = 200;
+    public final int ancho = 200;
     private final int rb = 1;
     private final int ra = 1;
     private final int lag = 4;
-    private final int prepl = 99;
-    private final int pinfect = 10000;
-    private final int pvih = 5;
+    private final double prepl = 0.99;
+    private final double pinfect = 0.00001;
+    private final double pvih = 0.05;
     //Datos variables 
-    private int alto;
-    private int ancho;
     private char actual[][];
     private char siguiente[][];
     private int lagActual [][];
@@ -25,9 +25,7 @@ public class VIH {
     private int celulasD;
 
     
-    public VIH(int alto, int ancho) {
-        this.alto = alto;
-        this.ancho = ancho;
+    public VIH() {
         this.celulasH= 0;
         this.celulasA=0;
         this.celulasB=0;
@@ -410,9 +408,9 @@ public class VIH {
             case 'D':
                 Random nuevaCelula = new Random();
                 //tomas las provabilidades dadas para decidir si la celula mueta sera reemplazada 
-                if (nuevaCelula.nextInt(prepl) == 1) {
+                if (nuevaCelula.nextDouble() <= prepl) {
                     Random nuevaA = new Random();
-                    if (nuevaA.nextInt(pinfect)== 1) {
+                    if (nuevaA.nextDouble() <= pinfect) {
                         this.setSiguiente(x, y, 'A');
                         return 'A';
                     }else{
@@ -440,7 +438,7 @@ public class VIH {
     
     //inserta un porcetaje(pvih) de celulas infectadas tipo A aleatoriamente
     public void insertarCelulasA(){
-        float porcentaje = (pvih*alto*ancho)/100;
+        double porcentaje = (pvih*alto*ancho);
         Random x = new Random();
         Random y = new Random();
         for (int i = 0; i < Math.round(porcentaje); i++) {

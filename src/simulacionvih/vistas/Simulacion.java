@@ -9,8 +9,8 @@ import java.util.TimerTask;
 import simulacionvih.VIH;
 
 public class Simulacion extends javax.swing.JFrame {
-    private final int ancho = 200;
-    private final int alto = 200;
+    private final int ancho;
+    private final int alto;
     private VIH cel;
     private Grafica graf;
     private Image tableroI;
@@ -26,7 +26,9 @@ public class Simulacion extends javax.swing.JFrame {
     
     public Simulacion() {
         initComponents();
-        cel = new VIH(ancho, alto);
+        cel = new VIH();
+        this.alto = cel.alto;
+        this.ancho = cel.ancho;
         h.add((double)alto*ancho);
         a.add(0.0);
         b.add(0.0);
